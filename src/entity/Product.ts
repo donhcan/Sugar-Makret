@@ -8,15 +8,9 @@ export class Product {
   @Column()
   name: string;
 
-  @Column({ nullable: true })
-  quantity: number;
-
+  
   @Column({ nullable: true })
   price: number;
 
-  @Column()
-  country: string;
-
-  @Column()
-  date: Date;
+  
 }

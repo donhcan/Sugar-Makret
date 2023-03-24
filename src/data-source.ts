@@ -1,6 +1,8 @@
 import "reflect-metadata"
 import { DataSource } from "typeorm"
 import { User } from "./entity/User"
+import { Product } from "./entity/Product"
+
 
 export const AppDataSource = new DataSource({
     type: "postgres",
@@ -11,7 +13,14 @@ export const AppDataSource = new DataSource({
     database: "test",
     synchronize: true,
     logging: false,
-    entities: [User],
+    entities: [User, Product],
     migrations: [],
     subscribers: [],
 })
+
+
+AppDataSource.initialize()
+    .then(() => {
+        // here you can start to work with your database
+    })
+    .catch((error) => console.log(error))
