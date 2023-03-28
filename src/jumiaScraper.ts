@@ -1,7 +1,8 @@
-import puppeteer from 'puppeteer';
-import { Product } from './entity/Product';
-import { AppDataSource } from './data-source';
 
+import "reflect-metadata";
+import { DataSource } from 'typeorm';
+import { Product } from './entity/Product';
+import puppeteer from 'puppeteer';
 
 const COUNTRIES = {
     'Uganda': 'https://www.jumia.ug',
@@ -12,7 +13,7 @@ const COUNTRIES = {
   async function scrapeJumia(): Promise<void> {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-    const url ='https://www.jumia.ug/catalog/?q=sugar+1kg';
+    const url ='http://127.0.0.1/products.html';
     await page.goto(url);
   
     const products = await page.$$eval(".prd a.core", (items) =>
@@ -28,15 +29,25 @@ const COUNTRIES = {
 
     console.log(products);
   
-    
+    const AppDataSource = new DataSource({
+        type: "postgres",
+        host: "127.0.0.1",
+        port: 5432,
+        username: "test",
+        password: "test",
+        database: "test",
+        entities: [Product],
+        synchronize: true,
+        logging: false,
+    })
   
   
     const today = new Date();
     for (const product of products) {
       const dbProduct = new Product();
       dbProduct.name = product.name;
-      dbProduct.price = 100;
-  
+      dbProduct.price = product.price ? parseFloat(product.price.trim().replace(",", "")) : null;
+
       await AppDataSource.manager.save(dbProduct);
     }
   

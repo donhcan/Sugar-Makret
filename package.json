@@ -15,6 +15,7 @@
       "typeorm": "0.3.12"
    },
    "scripts": {
+      "add" : "ts-node src/addProduct.ts",
       "scrape": "ts-node src/jumiaScraper.ts",
       "start": "ts-node src/index.ts",
       "typeorm": "typeorm-ts-node-commonjs"
